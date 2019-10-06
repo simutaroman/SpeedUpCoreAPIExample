@@ -19,17 +19,20 @@ namespace SpeedUpCoreAPIExample.Repositories
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Products.AsNoTracking().ToListAsync();
         }
 
         public async Task<Product> GetProductAsync(int productId)
         {
-            return await _context.Products.Where(p => p.ProductId == productId).FirstOrDefaultAsync();
+            return await _context.Products.AsNoTracking().Where(p => p.ProductId == productId).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Product>> FindProductsAsync(string sku)
         {
-            return await _context.Products.Where(p => p.Sku.Contains(sku)).ToListAsync();
+            //return await _context.Products.Where(p => p.Sku.Contains(sku)).ToListAsync();
+            //return await _context.Products.FromSql("[dbo].GetProductsBySKU @sku = {0}", sku).ToListAsync();
+            return await _context.Products.FromSqlRaw("[dbo].GetProductsBySKU @sku = {0}",
+                                                                     sku).AsNoTracking().ToListAsync();
         }
 
         public async Task<Product> DeleteProductAsync(int productId)

@@ -19,7 +19,8 @@ namespace SpeedUpCoreAPIExample.Repositories
 
         public async Task<IEnumerable<Price>> GetPricesAsync(int productId)
         {
-            return await _context.Prices.Where(p => p.ProductId == productId).ToListAsync();
+            //return await _context.Prices.Where(p => p.ProductId == productId).ToListAsync();
+            return await _context.Prices.FromSqlRaw("[dbo].GetPricesByProductId @productId = {0}", productId).AsNoTracking().ToListAsync();
         }
     }
 }

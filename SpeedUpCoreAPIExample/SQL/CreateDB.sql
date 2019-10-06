@@ -48,3 +48,189 @@ INSERT INTO Prices ([ProductId], [Value], [Supplier]) VALUES (3, 165, 'LG');
 INSERT INTO Prices ([ProductId], [Value], [Supplier]) VALUES (3, 170, 'Garmin');
 
 GO
+
+USE [SpeedUpCoreAPIExampleDB] 
+GO 
+
+ALTER TABLE [Products]
+ALTER COLUMN SKU nvarchar(50) NOT NULL
+
+ALTER TABLE [Products]
+ALTER COLUMN [Name] nvarchar(150) NOT NULL
+
+ALTER TABLE [Prices]
+ALTER COLUMN Supplier nvarchar(50) NOT NULL
+
+USE [SpeedUpCoreAPIExampleDB] 
+GO 
+
+UPDATE Products SET SKU = RTRIM(SKU), Name = RTRIM(Name) 
+GO
+
+UPDATE Prices SET  Supplier = RTRIM(Supplier)
+GO
+
+USE [SpeedUpCoreAPIExampleDB] 
+GO 
+
+CREATE FULLTEXT CATALOG [ProductsFTS] WITH ACCENT_SENSITIVITY = ON
+AS DEFAULT
+GO
+
+USE [SpeedUpCoreAPIExampleDB] 
+GO 
+
+CREATE FULLTEXT INDEX ON [dbo].[Products]
+(SKU LANGUAGE 1033)
+KEY INDEX PK_Products
+ON ProductsFTS
+GO
+
+USE [SpeedUpCoreAPIExampleDB]
+GO
+
+CREATE PROCEDURE [dbo].[GetProductsBySKU]
+	@sku [varchar] (50) 
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	Select @sku = '"' + @sku + '*"'
+
+    -- Insert statements for procedure here
+	SELECT ProductId, SKU, Name FROM [dbo].Products WHERE CONTAINS(SKU, @sku)
+END
+GO
+USE [SpeedUpCoreAPIExampleDB]
+GO
+
+EXEC [dbo].[GetProductsBySKU] 'aa'
+GO
+
+USE [SpeedUpCoreAPIExampleDB]
+GO
+
+--clear cache
+DBCC FREEPROCCACHE
+
+SELECT cplan.usecounts, cplan.objtype, qtext.text, qplan.query_plan
+FROM sys.dm_exec_cached_plans AS cplan
+CROSS APPLY sys.dm_exec_sql_text(plan_handle) AS qtext
+CROSS APPLY sys.dm_exec_query_plan(plan_handle) AS qplan
+ORDER BY cplan.usecounts DESC
+
+
+USE [SpeedUpCoreAPIExampleDB] 
+GO 
+
+ALTER TABLE [Prices]
+ADD xProductId AS convert(nvarchar(10), ProductId) PERSISTED NOT NULL
+GO 
+
+USE [SpeedUpCoreAPIExampleDB] 
+GO 
+
+CREATE FULLTEXT CATALOG [PricesFTS] WITH ACCENT_SENSITIVITY = ON
+AS DEFAULT
+GO
+
+CREATE FULLTEXT INDEX ON [dbo].[Prices]
+(xProductId LANGUAGE 1033)
+KEY INDEX PK_Prices
+ON PricesFTS
+GO
+
+USE [SpeedUpCoreAPIExampleDB]
+GO
+
+CREATE PROCEDURE [dbo].[GetPricesByProductId]
+	@productId [int]
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @xProductId [NVARCHAR] (10)
+	Select @xProductId = '"' + CONVERT([nvarchar](10),@productId) + '"'
+
+    -- Insert statements for procedure here
+	SELECT PriceId, ProductId, [Value], Supplier FROM [dbo].Prices WHERE CONTAINS(xProductId, @xProductId)
+END
+GO
+
+USE [SpeedUpCoreAPIExampleDB]
+GO
+
+DECLARE	@return_value int
+EXEC	@return_value = [dbo].[GetPricesByProductId]
+		@productId = 1
+
+SELECT	'Return Value' = @return_value
+GO
+
+SELECT display_term FROM sys.dm_fts_parser (' "1" ', 1033, 0, 0)
+SELECT display_term FROM sys.dm_fts_parser (' "x1" ', 1033, 0, 0)
+
+USE [SpeedUpCoreAPIExampleDB]
+GO
+
+DROP FULLTEXT INDEX ON [Prices]
+GO
+
+USE [SpeedUpCoreAPIExampleDB]
+GO
+
+ALTER TABLE [Prices]
+DROP COLUMN xProductId
+GO
+
+USE [SpeedUpCoreAPIExampleDB] 
+GO 
+
+ALTER TABLE [Prices]
+ADD xProductId AS 'x' + convert(nvarchar(10), ProductId) PERSISTED NOT NULL
+GO
+
+USE [SpeedUpCoreAPIExampleDB] 
+GO 
+
+SELECT * FROM [Prices]
+GO
+
+USE [SpeedUpCoreAPIExampleDB] 
+GO 
+
+CREATE FULLTEXT INDEX ON [dbo].[Prices]
+(xProductId LANGUAGE 1033)
+KEY INDEX PK_Prices
+ON PricesFTS
+GO
+
+USE [SpeedUpCoreAPIExampleDB]
+GO
+
+ALTER PROCEDURE [dbo].[GetPricesByProductId]
+	@productId [int]
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @xProductId [NVARCHAR] (10)
+	Select @xProductId = '"x' + CONVERT([nvarchar](10),@productId) + '"'
+
+    -- Insert statements for procedure here
+	SELECT PriceId, ProductId, [Value], Supplier FROM [dbo].Prices WHERE CONTAINS(xProductId, @xProductId)
+END
+
+GO
+
+USE [SpeedUpCoreAPIExampleDB]
+GO
+
+DECLARE	@return_value int
+
+EXEC	@return_value = [dbo].[GetPricesByProductId]
+		@productId = 1
+
+SELECT	'Return Value' = @return_value
+
+GO
