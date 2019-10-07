@@ -30,6 +30,13 @@ namespace SpeedUpCoreAPIExample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddDistributedRedisCache(options =>
+            {
+                options.InstanceName = Configuration.GetValue<string>("Redis:Name");
+                options.Configuration = Configuration.GetValue<string>("Redis:Host");
+            });
+
             services.AddDbContext<DefaultContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultDatabase")));
 
             services.AddScoped<IProductsRepository, ProductsRepository>();
