@@ -2,6 +2,7 @@
 using SpeedUpCoreAPIExample.Interfaces;
 using SpeedUpCoreAPIExample.Models;
 using SpeedUpCoreAPIExample.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,6 +44,17 @@ namespace SpeedUpCoreAPIExample.Services
             catch
             {
                 return new ConflictResult();
+            }
+        }
+
+        public async Task PreparePricesAsync(int productId)
+        {
+            try
+            {
+                await _pricesRepository.PreparePricesAsync(productId);
+            }
+            catch (Exception ex)
+            {
             }
         }
     }

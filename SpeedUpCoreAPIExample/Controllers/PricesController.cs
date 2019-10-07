@@ -21,5 +21,14 @@ namespace SpeedUpCoreAPIExample.Contexts
         {
             return await _pricesService.GetPricesAsync(id);
         }
+
+        // POST api/prices/prepare/5
+        [HttpPost("prepare/{id}")]
+        public async Task<IActionResult> PreparePricessAsync(int id)
+        {
+            await _pricesService.PreparePricesAsync(id);
+
+            return Ok();
+        }
     }
 }

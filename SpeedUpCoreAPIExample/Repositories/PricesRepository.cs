@@ -50,6 +50,30 @@ namespace SpeedUpCoreAPIExample.Repositories
             return prices;
         }
 
+        public async Task PreparePricesAsync(int productId)
+        {
+            IEnumerable<Price> prices = null;
+
+            string cacheKey = "Prices: " + productId;
+
+            var pricesTemp = await _distributedCache.GetStringAsync(cacheKey);
+            if (pricesTemp != null)
+            {
+                //already cached
+                return;
+            }
+            else
+            {
+                prices = await _context.Prices.FromSqlRaw("[dbo].GetPricesByProductId @productId = {0}", productId).AsNoTracking().ToListAsync();
+
+                //cache prices for PricesExpirationPeriod minutes
+                DistributedCacheEntryOptions cacheOptions = new DistributedCacheEntryOptions()
+                                .SetAbsoluteExpiration(TimeSpan.FromMinutes(_settings.PricesExpirationPeriod));
+                await _distributedCache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(prices), cacheOptions);
+            }
+            return;
+        }
+
         private class Settings
         {
             public int PricesExpirationPeriod = 15;       //15 minutes by default

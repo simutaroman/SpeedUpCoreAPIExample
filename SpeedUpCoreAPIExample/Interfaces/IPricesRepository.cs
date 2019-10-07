@@ -7,5 +7,6 @@ namespace SpeedUpCoreAPIExample.Interfaces
     public interface IPricesRepository
     {
         Task<IEnumerable<Price>> GetPricesAsync(int productId);
+        Task PreparePricesAsync(int productId);
     }
 }
