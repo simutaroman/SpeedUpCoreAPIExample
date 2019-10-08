@@ -26,12 +26,7 @@ namespace SpeedUpCoreAPIExample.Services
 
                 if (pricess != null)
                 {
-                    return new OkObjectResult(pricess.Select(p => new PriceViewModel()
-                    {
-                        Price = p.Value,
-                        Supplier = p.Supplier.Trim()
-                    }
-                    )
+                    return new OkObjectResult(pricess.Select(p => new PriceViewModel(p))
                     .OrderBy(p => p.Price)
                     .ThenBy(p => p.Supplier)
                     );

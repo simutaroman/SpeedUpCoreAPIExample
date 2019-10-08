@@ -42,13 +42,7 @@ namespace SpeedUpCoreAPIExample.Services
                             PreparePricesAsync(products.FirstOrDefault().ProductId);
                         });
                     };
-                    return new OkObjectResult(products.Select(p => new ProductViewModel()
-                    {
-                        Id = p.ProductId,
-                        Sku = p.Sku.Trim(),
-                        Name = p.Name.Trim()
-                    }
-                    ));
+                    return new OkObjectResult(products.Select(p => new ProductViewModel(p)));
                 }
                 else
                 {
@@ -69,13 +63,7 @@ namespace SpeedUpCoreAPIExample.Services
 
                 if (products != null)
                 {
-                    return new OkObjectResult(products.Select(p => new ProductViewModel()
-                    {
-                        Id = p.ProductId,
-                        Sku = p.Sku.Trim(),
-                        Name = p.Name.Trim()
-                    }
-                    ));
+                    return new OkObjectResult(products.Select(p => new ProductViewModel(p)));
                 }
                 else
                 {
@@ -101,12 +89,7 @@ namespace SpeedUpCoreAPIExample.Services
                         PreparePricesAsync(productId);
                     });
 
-                    return new OkObjectResult(new ProductViewModel()
-                    {
-                        Id = product.ProductId,
-                        Sku = product.Sku.Trim(),
-                        Name = product.Name.Trim()
-                    });
+                    return new OkObjectResult(new ProductViewModel(product));
                 }
                 else
                 {
@@ -127,12 +110,7 @@ namespace SpeedUpCoreAPIExample.Services
 
                 if (product != null)
                 {
-                    return new OkObjectResult(new ProductViewModel()
-                    {
-                        Id = product.ProductId,
-                        Sku = product.Sku.Trim(),
-                        Name = product.Name.Trim()
-                    });
+                    return new OkObjectResult(new ProductViewModel(product));
                 }
                 else
                 {
