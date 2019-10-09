@@ -19,7 +19,7 @@ namespace SpeedUpCoreAPIExample.Contexts
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetPricesAsync(int id)
         {
-            return await _pricesService.GetPricesAsync(id);
+            return new OkObjectResult(await _pricesService.GetPricesAsync(id));
         }
 
         // POST api/prices/prepare/5

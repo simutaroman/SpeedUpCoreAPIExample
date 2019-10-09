@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SpeedUpCoreAPIExample.Exceptions;
 using SpeedUpCoreAPIExample.Interfaces;
 using SpeedUpCoreAPIExample.Models;
 using SpeedUpCoreAPIExample.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,7 +29,7 @@ namespace SpeedUpCoreAPIExample.Services
             _apiUrl = GetFullyQualifiedApiUrl("/api/prices/prepare/");
         }
 
-        public async Task<IActionResult> FindProductsAsync(string sku)
+        public async Task<IEnumerable<ProductViewModel>> FindProductsAsync(string sku)
         {
             IEnumerable<Product> products = await _productsRepository.FindProductsAsync(sku);
 
@@ -38,48 +40,39 @@ namespace SpeedUpCoreAPIExample.Services
                     PreparePricesAsync(products.FirstOrDefault().ProductId);
                 });
             };
-            return new OkObjectResult(products.Select(p => new ProductViewModel(p)));
-
+            return products.Select(p => new ProductViewModel(p));
         }
 
-        public async Task<IActionResult> GetAllProductsAsync()
+        public async Task<IEnumerable<ProductViewModel>> GetAllProductsAsync()
         {
             IEnumerable<Product> products = await _productsRepository.GetAllProductsAsync();
 
-            return new OkObjectResult(products.Select(p => new ProductViewModel(p)));
+            return products.Select(p => new ProductViewModel(p));
         }
 
-        public async Task<IActionResult> GetProductAsync(int productId)
+        public async Task<ProductViewModel> GetProductAsync(int productId)
         {
             Product product = await _productsRepository.GetProductAsync(productId);
 
-            if (product != null)
-            {
-                ThreadPool.QueueUserWorkItem(delegate
-                {
-                    PreparePricesAsync(productId);
-                });
+            if (product == null)
+                throw new HttpException(HttpStatusCode.NotFound, "Product not found", $"Product Id: {productId}");
 
-                return new OkObjectResult(new ProductViewModel(product));
-            }
-            else
+            ThreadPool.QueueUserWorkItem(delegate
             {
-                return new NotFoundResult();
-            }
+                PreparePricesAsync(productId);
+            });
+
+            return new ProductViewModel(product);
         }
 
-        public async Task<IActionResult> DeleteProductAsync(int productId)
+        public async Task<ProductViewModel> DeleteProductAsync(int productId)
         {
             Product product = await _productsRepository.DeleteProductAsync(productId);
 
-            if (product != null)
-            {
-                return new OkObjectResult(new ProductViewModel(product));
-            }
-            else
-            {
-                return new NotFoundResult();
-            }
+            if (product == null)
+                throw new HttpException(HttpStatusCode.NotFound, "Product not found", $"Product Id: {productId}");
+
+            return new ProductViewModel(product);
         }
 
         private async void PreparePricesAsync(int productId)

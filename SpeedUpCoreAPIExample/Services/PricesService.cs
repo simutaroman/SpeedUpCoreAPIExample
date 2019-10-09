@@ -18,14 +18,13 @@ namespace SpeedUpCoreAPIExample.Services
             _pricesRepository = pricesRepository;
         }
 
-        public async Task<IActionResult> GetPricesAsync(int productId)
+        public async Task<IEnumerable<PriceViewModel>> GetPricesAsync(int productId)
         {
             IEnumerable<Price> pricess = await _pricesRepository.GetPricesAsync(productId);
 
-            return new OkObjectResult(pricess.Select(p => new PriceViewModel(p))
+            return pricess.Select(p => new PriceViewModel(p))
             .OrderBy(p => p.Price)
-            .ThenBy(p => p.Supplier)
-            );
+            .ThenBy(p => p.Supplier);
         }
 
         public async Task PreparePricesAsync(int productId)

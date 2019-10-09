@@ -24,9 +24,32 @@ namespace SpeedUpCoreAPIExample.Exceptions
             {
                 await _next(httpContext);
             }
+            catch (HttpException ex)
+            {
+                await HandleHttpExceptionAsync(httpContext, ex);
+            }
             catch (Exception ex)
             {
                 await HandleUnhandledExceptionAsync(httpContext, ex);
+            }
+        }
+
+        private async Task HandleHttpExceptionAsync(HttpContext context, HttpException exception)
+        {
+            _logger.LogError(exception, exception.MessageDetail);
+
+            if (!context.Response.HasStarted)
+            {
+                int statusCode = exception.StatusCode;
+                string message = exception.Message;
+
+                context.Response.Clear();
+
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = statusCode;
+
+                var result = new ExceptionMessage(message).ToString();
+                await context.Response.WriteAsync(result);
             }
         }
 
