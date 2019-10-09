@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SpeedUpCoreAPIExample.Contexts;
 using SpeedUpCoreAPIExample.Exceptions;
+using SpeedUpCoreAPIExample.Helpers;
 using SpeedUpCoreAPIExample.Interfaces;
 using SpeedUpCoreAPIExample.Repositories;
 using SpeedUpCoreAPIExample.Services;
@@ -33,7 +34,8 @@ namespace SpeedUpCoreAPIExample
         {
             services.AddControllers();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddHttpClient();
+            
+            services.AddHttpClient<ISelfHttpClient, SelfHttpClient>();
 
             services.AddDistributedRedisCache(options =>
             {
