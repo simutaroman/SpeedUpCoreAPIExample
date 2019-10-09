@@ -29,97 +29,56 @@ namespace SpeedUpCoreAPIExample.Services
 
         public async Task<IActionResult> FindProductsAsync(string sku)
         {
-            try
-            {
-                IEnumerable<Product> products = await _productsRepository.FindProductsAsync(sku);
+            IEnumerable<Product> products = await _productsRepository.FindProductsAsync(sku);
 
-                if (products != null)
-                {
-                    if (products.Count() == 1)
-                    {
-                        ThreadPool.QueueUserWorkItem(delegate
-                        {
-                            PreparePricesAsync(products.FirstOrDefault().ProductId);
-                        });
-                    };
-                    return new OkObjectResult(products.Select(p => new ProductViewModel(p)));
-                }
-                else
-                {
-                    return new NotFoundResult();
-                }
-            }
-            catch
+            if (products.Count() == 1)
             {
-                return new ConflictResult();
-            }
+                ThreadPool.QueueUserWorkItem(delegate
+                {
+                    PreparePricesAsync(products.FirstOrDefault().ProductId);
+                });
+            };
+            return new OkObjectResult(products.Select(p => new ProductViewModel(p)));
+
         }
 
         public async Task<IActionResult> GetAllProductsAsync()
         {
-            try
-            {
-                IEnumerable<Product> products = await _productsRepository.GetAllProductsAsync();
+            IEnumerable<Product> products = await _productsRepository.GetAllProductsAsync();
 
-                if (products != null)
-                {
-                    return new OkObjectResult(products.Select(p => new ProductViewModel(p)));
-                }
-                else
-                {
-                    return new NotFoundResult();
-                }
-            }
-            catch
-            {
-                return new ConflictResult();
-            }
+            return new OkObjectResult(products.Select(p => new ProductViewModel(p)));
         }
 
         public async Task<IActionResult> GetProductAsync(int productId)
         {
-            try
+            Product product = await _productsRepository.GetProductAsync(productId);
+
+            if (product != null)
             {
-                Product product = await _productsRepository.GetProductAsync(productId);
-
-                if (product != null)
+                ThreadPool.QueueUserWorkItem(delegate
                 {
-                    ThreadPool.QueueUserWorkItem(delegate
-                    {
-                        PreparePricesAsync(productId);
-                    });
+                    PreparePricesAsync(productId);
+                });
 
-                    return new OkObjectResult(new ProductViewModel(product));
-                }
-                else
-                {
-                    return new NotFoundResult();
-                }
+                return new OkObjectResult(new ProductViewModel(product));
             }
-            catch
+            else
             {
-                return new ConflictResult();
+                return new NotFoundResult();
             }
         }
 
         public async Task<IActionResult> DeleteProductAsync(int productId)
         {
-            try
-            {
-                Product product = await _productsRepository.DeleteProductAsync(productId);
+            Product product = await _productsRepository.DeleteProductAsync(productId);
 
-                if (product != null)
-                {
-                    return new OkObjectResult(new ProductViewModel(product));
-                }
-                else
-                {
-                    return new NotFoundResult();
-                }
-            }
-            catch
+            if (product != null)
             {
-                return new ConflictResult();
+                return new OkObjectResult(new ProductViewModel(product));
+            }
+            else
+            {
+                return new NotFoundResult();
             }
         }
 
@@ -128,14 +87,8 @@ namespace SpeedUpCoreAPIExample.Services
             var parameters = new Dictionary<string, string>();
             var encodedContent = new FormUrlEncodedContent(parameters);
 
-            try
-            {
-                HttpClient client = _httpClientFactory.CreateClient();
-                var result = await client.PostAsync(_apiUrl + productId, encodedContent).ConfigureAwait(false);
-            }
-            catch
-            {
-            }
+            HttpClient client = _httpClientFactory.CreateClient();
+            var result = await client.PostAsync(_apiUrl + productId, encodedContent).ConfigureAwait(false);
         }
 
         private string GetFullyQualifiedApiUrl(string apiRout)

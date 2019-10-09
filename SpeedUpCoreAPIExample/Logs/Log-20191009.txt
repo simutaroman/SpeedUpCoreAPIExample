@@ -1,0 +1,160 @@
+2019-10-09T12:36:31.5362135+03:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2019-10-09T12:36:31.5500972+03:00  [INF] Hosting environment: "Development" (c3307c92)
+2019-10-09T12:36:31.5517252+03:00  [INF] Content root path: "C:\Prj\simuta\SpeedUpCoreAPIExample\SpeedUpCoreAPIExample" (b5d60022)
+2019-10-09T12:36:31.6389969+03:00 8000003f-0002-f700-b63f-84710c7967bb [INF] Request starting HTTP/1.1 GET http://localhost:1231/api   (ca22a1cb)
+2019-10-09T12:36:31.6919464+03:00 8000003f-0002-f700-b63f-84710c7967bb [INF] Request finished in 54.630500000000005ms 404  (791a596a)
+2019-10-09T12:36:57.7466766+03:00 80000040-0002-f700-b63f-84710c7967bb [INF] Request starting HTTP/1.1 GET http://localhost:1231/api/products/find/aa   (ca22a1cb)
+2019-10-09T12:36:57.7748232+03:00 80000040-0002-f700-b63f-84710c7967bb [INF] Executing endpoint '"SpeedUpCoreAPIExample.Controllers.ProductsController.FindProductsAsync (SpeedUpCoreAPIExample)"' (500cc934)
+2019-10-09T12:36:57.8316887+03:00 80000040-0002-f700-b63f-84710c7967bb [INF] Route matched with "{action = \"FindProducts\", controller = \"Products\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] FindProductsAsync(System.String)" on controller "SpeedUpCoreAPIExample.Controllers.ProductsController" ("SpeedUpCoreAPIExample"). (122b2fdf)
+2019-10-09T12:36:58.1643251+03:00 80000040-0002-f700-b63f-84710c7967bb [INF] Executing action method "SpeedUpCoreAPIExample.Controllers.ProductsController.FindProductsAsync (SpeedUpCoreAPIExample)" - Validation state: Valid (dad538d7)
+2019-10-09T12:36:58.4563333+03:00 80000040-0002-f700-b63f-84710c7967bb [WRN] No type was specified for the decimal column '"Value"' on entity type '"Price"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'. (3a0db05f)
+2019-10-09T12:36:58.5004302+03:00 80000040-0002-f700-b63f-84710c7967bb [INF] Entity Framework Core "3.0.0" initialized '"DefaultContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None" (9958f5bb)
+2019-10-09T12:36:59.0730210+03:00 80000040-0002-f700-b63f-84710c7967bb [INF] Executing DbCommand [Parameters=["p0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""[dbo].GetProductsBySKUError @sku = @p0" (65d11854)
+2019-10-09T12:36:59.1371474+03:00 80000040-0002-f700-b63f-84710c7967bb [ERR] Failed executing DbCommand ("68"ms) [Parameters=["p0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""[dbo].GetProductsBySKUError @sku = @p0" (627a98df)
+2019-10-09T12:36:59.2231898+03:00 80000040-0002-f700-b63f-84710c7967bb [ERR] An exception occurred while iterating over the results of a query for context type '"SpeedUpCoreAPIExample.Contexts.DefaultContext"'."
+""Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'dbo.GetProductsBySKUError'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.RelationalShapedQueryCompilingExpressionVisitor.AsyncQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:11d8ddf9-7345-47bf-8129-1ccd4f29bbe2
+Error Number:2812,State:62,Class:16" (f5c7ac34)
+Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'dbo.GetProductsBySKUError'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.RelationalShapedQueryCompilingExpressionVisitor.AsyncQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:11d8ddf9-7345-47bf-8129-1ccd4f29bbe2
+Error Number:2812,State:62,Class:16
+2019-10-09T12:36:59.3834532+03:00 80000040-0002-f700-b63f-84710c7967bb [INF] Executed action "SpeedUpCoreAPIExample.Controllers.ProductsController.FindProductsAsync (SpeedUpCoreAPIExample)" in 1544.366ms (afa2e885)
+2019-10-09T12:36:59.3858641+03:00 80000040-0002-f700-b63f-84710c7967bb [INF] Executed endpoint '"SpeedUpCoreAPIExample.Controllers.ProductsController.FindProductsAsync (SpeedUpCoreAPIExample)"' (99874f2b)
+2019-10-09T12:36:59.5105478+03:00 80000040-0002-f700-b63f-84710c7967bb [ERR] Could not find stored procedure 'dbo.GetProductsBySKUError'. (1988ddb8)
+Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'dbo.GetProductsBySKUError'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.RelationalShapedQueryCompilingExpressionVisitor.AsyncQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at SpeedUpCoreAPIExample.Repositories.ProductsRepository.FindProductsAsync(String sku) in C:\Prj\simuta\SpeedUpCoreAPIExample\SpeedUpCoreAPIExample\Repositories\ProductsRepository.cs:line 34
+   at SpeedUpCoreAPIExample.Services.ProductsService.FindProductsAsync(String sku) in C:\Prj\simuta\SpeedUpCoreAPIExample\SpeedUpCoreAPIExample\Services\ProductsService.cs:line 32
+   at SpeedUpCoreAPIExample.Controllers.ProductsController.FindProductsAsync(String sku) in C:\Prj\simuta\SpeedUpCoreAPIExample\SpeedUpCoreAPIExample\Controllers\ProductsController.cs:line 36
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at SpeedUpCoreAPIExample.Exceptions.ExceptionsHandlingMiddleware.InvokeAsync(HttpContext httpContext) in C:\Prj\simuta\SpeedUpCoreAPIExample\SpeedUpCoreAPIExample\Exceptions\ExceptionsHandlingMiddleware.cs:line 25
+ClientConnectionId:11d8ddf9-7345-47bf-8129-1ccd4f29bbe2
+Error Number:2812,State:62,Class:16
+2019-10-09T12:36:59.6753921+03:00 80000040-0002-f700-b63f-84710c7967bb [INF] Request finished in 1931.0618000000002ms 500 application/json (791a596a)
+2019-10-09T12:38:22.3607276+03:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2019-10-09T12:38:22.3763148+03:00  [INF] Hosting environment: "Development" (c3307c92)
+2019-10-09T12:38:22.3777017+03:00  [INF] Content root path: "C:\Prj\simuta\SpeedUpCoreAPIExample\SpeedUpCoreAPIExample" (b5d60022)
+2019-10-09T12:38:22.3887018+03:00 80000042-0002-f700-b63f-84710c7967bb [INF] Request starting HTTP/1.1 GET http://localhost:1231/api   (ca22a1cb)
+2019-10-09T12:38:22.4573876+03:00 80000042-0002-f700-b63f-84710c7967bb [INF] Request finished in 73.4308ms 404  (791a596a)
+2019-10-09T12:38:44.9688375+03:00 80000043-0002-f700-b63f-84710c7967bb [INF] Request starting HTTP/1.1 GET http://localhost:1231/api/products/find/aa   (ca22a1cb)
+2019-10-09T12:38:44.9907246+03:00 80000043-0002-f700-b63f-84710c7967bb [INF] Executing endpoint '"SpeedUpCoreAPIExample.Controllers.ProductsController.FindProductsAsync (SpeedUpCoreAPIExample)"' (500cc934)
+2019-10-09T12:38:45.0342626+03:00 80000043-0002-f700-b63f-84710c7967bb [INF] Route matched with "{action = \"FindProducts\", controller = \"Products\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] FindProductsAsync(System.String)" on controller "SpeedUpCoreAPIExample.Controllers.ProductsController" ("SpeedUpCoreAPIExample"). (122b2fdf)
+2019-10-09T12:38:45.2774617+03:00 80000043-0002-f700-b63f-84710c7967bb [INF] Executing action method "SpeedUpCoreAPIExample.Controllers.ProductsController.FindProductsAsync (SpeedUpCoreAPIExample)" - Validation state: Valid (dad538d7)
+2019-10-09T12:38:45.5340626+03:00 80000043-0002-f700-b63f-84710c7967bb [WRN] No type was specified for the decimal column '"Value"' on entity type '"Price"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'. (3a0db05f)
+2019-10-09T12:38:45.5662955+03:00 80000043-0002-f700-b63f-84710c7967bb [INF] Entity Framework Core "3.0.0" initialized '"DefaultContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None" (9958f5bb)
+2019-10-09T12:38:46.0393496+03:00 80000043-0002-f700-b63f-84710c7967bb [INF] Executing DbCommand [Parameters=["p0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""[dbo].GetProductsBySKUError @sku = @p0" (65d11854)
+2019-10-09T12:38:46.0981986+03:00 80000043-0002-f700-b63f-84710c7967bb [ERR] Failed executing DbCommand ("64"ms) [Parameters=["p0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""[dbo].GetProductsBySKUError @sku = @p0" (627a98df)
+2019-10-09T12:38:46.1419875+03:00 80000043-0002-f700-b63f-84710c7967bb [ERR] An exception occurred while iterating over the results of a query for context type '"SpeedUpCoreAPIExample.Contexts.DefaultContext"'."
+""Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'dbo.GetProductsBySKUError'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.RelationalShapedQueryCompilingExpressionVisitor.AsyncQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:8ec75ce0-53b2-4c7d-9b94-bfff7940b105
+Error Number:2812,State:62,Class:16" (f5c7ac34)
+Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'dbo.GetProductsBySKUError'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.RelationalShapedQueryCompilingExpressionVisitor.AsyncQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:8ec75ce0-53b2-4c7d-9b94-bfff7940b105
+Error Number:2812,State:62,Class:16
+2019-10-09T12:38:46.1567516+03:00 80000043-0002-f700-b63f-84710c7967bb [INF] Executed action "SpeedUpCoreAPIExample.Controllers.ProductsController.FindProductsAsync (SpeedUpCoreAPIExample)" in 1114.5284000000001ms (afa2e885)
+2019-10-09T12:38:46.1597271+03:00 80000043-0002-f700-b63f-84710c7967bb [INF] Executed endpoint '"SpeedUpCoreAPIExample.Controllers.ProductsController.FindProductsAsync (SpeedUpCoreAPIExample)"' (99874f2b)
+2019-10-09T12:38:46.1925348+03:00 80000043-0002-f700-b63f-84710c7967bb [ERR] Could not find stored procedure 'dbo.GetProductsBySKUError'. (1988ddb8)
+Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'dbo.GetProductsBySKUError'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.RelationalShapedQueryCompilingExpressionVisitor.AsyncQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at SpeedUpCoreAPIExample.Repositories.ProductsRepository.FindProductsAsync(String sku) in C:\Prj\simuta\SpeedUpCoreAPIExample\SpeedUpCoreAPIExample\Repositories\ProductsRepository.cs:line 34
+   at SpeedUpCoreAPIExample.Services.ProductsService.FindProductsAsync(String sku) in C:\Prj\simuta\SpeedUpCoreAPIExample\SpeedUpCoreAPIExample\Services\ProductsService.cs:line 32
+   at SpeedUpCoreAPIExample.Controllers.ProductsController.FindProductsAsync(String sku) in C:\Prj\simuta\SpeedUpCoreAPIExample\SpeedUpCoreAPIExample\Controllers\ProductsController.cs:line 36
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at SpeedUpCoreAPIExample.Exceptions.ExceptionsHandlingMiddleware.InvokeAsync(HttpContext httpContext) in C:\Prj\simuta\SpeedUpCoreAPIExample\SpeedUpCoreAPIExample\Exceptions\ExceptionsHandlingMiddleware.cs:line 25
+ClientConnectionId:8ec75ce0-53b2-4c7d-9b94-bfff7940b105
+Error Number:2812,State:62,Class:16
+2019-10-09T12:38:46.3337141+03:00 80000043-0002-f700-b63f-84710c7967bb [INF] Request finished in 1364.9346ms 500 application/json (791a596a)

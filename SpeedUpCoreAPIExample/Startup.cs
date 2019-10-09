@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SpeedUpCoreAPIExample.Contexts;
+using SpeedUpCoreAPIExample.Exceptions;
 using SpeedUpCoreAPIExample.Interfaces;
 using SpeedUpCoreAPIExample.Repositories;
 using SpeedUpCoreAPIExample.Services;
@@ -50,8 +51,10 @@ namespace SpeedUpCoreAPIExample
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddFile("Logs/Log.txt");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -60,6 +63,8 @@ namespace SpeedUpCoreAPIExample
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<ExceptionsHandlingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
