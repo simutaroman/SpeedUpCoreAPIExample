@@ -17,6 +17,7 @@ using SpeedUpCoreAPIExample.Helpers;
 using SpeedUpCoreAPIExample.Interfaces;
 using SpeedUpCoreAPIExample.Repositories;
 using SpeedUpCoreAPIExample.Services;
+using SpeedUpCoreAPIExample.Settings;
 
 namespace SpeedUpCoreAPIExample
 {
@@ -43,10 +44,15 @@ namespace SpeedUpCoreAPIExample
                 options.Configuration = Configuration.GetValue<string>("Redis:Host");
             });
 
+            services.Configure<ProductsSettings>(Configuration.GetSection("Products"));
+            services.Configure<PricesSettings>(Configuration.GetSection("Prices"));
+
             services.AddDbContext<DefaultContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultDatabase")));
 
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IPricesRepository, PricesRepository>();
+            services.AddScoped<IPricesCacheRepository, PricesCacheRepository>();
+            services.AddScoped<IProductCacheRepository, ProductCacheRepository>();
 
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<IPricesService, PricesService>();

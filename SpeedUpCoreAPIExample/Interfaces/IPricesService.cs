@@ -8,6 +8,8 @@ namespace SpeedUpCoreAPIExample.Interfaces
     public interface IPricesService
     {
         Task<IEnumerable<PriceViewModel>> GetPricesAsync(int productId);
+        Task<bool> IsPriceCachedAsync(int productId);
+        Task RemovePriceAsync(int productId);
         Task PreparePricesAsync(int productId);
     }
 }
