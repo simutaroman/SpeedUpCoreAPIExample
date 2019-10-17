@@ -17,9 +17,9 @@ namespace SpeedUpCoreAPIExample.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        public IQueryable<Product> GetAllProductsAsync()
         {
-            return await _context.Products.AsNoTracking().ToListAsync();
+            return _context.Products.AsNoTracking();
         }
 
         public async Task<Product> GetProductAsync(int productId)
@@ -27,12 +27,12 @@ namespace SpeedUpCoreAPIExample.Repositories
             return await _context.Products.AsNoTracking().Where(p => p.ProductId == productId).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Product>> FindProductsAsync(string sku)
+        public IQueryable<Product> FindProductsAsync(string sku)
         {
             //return await _context.Products.Where(p => p.Sku.Contains(sku)).ToListAsync();
             //return await _context.Products.FromSql("[dbo].GetProductsBySKU @sku = {0}", sku).ToListAsync();
-            return await _context.Products.FromSqlRaw("[dbo].GetProductsBySKU @sku = {0}",
-                                                                     sku).AsNoTracking().ToListAsync();
+            return _context.Products.FromSqlRaw("[dbo].GetProductsBySKU @sku = {0}",
+                                                                     sku).AsNoTracking();
         }
 
         public async Task<Product> DeleteProductAsync(int productId)

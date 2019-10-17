@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SpeedUpCoreAPIExample.Interfaces;
+using SpeedUpCoreAPIExample.ViewModels;
 using System.Threading.Tasks;
 
 namespace SpeedUpCoreAPIExample.Contexts
@@ -17,9 +18,11 @@ namespace SpeedUpCoreAPIExample.Contexts
 
         // GET /api/prices/1
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetPricesAsync(int id)
+        public async Task<IActionResult> GetPricesAsync(int id, int pageIndex, int pageSize)
         {
-            return new OkObjectResult(await _pricesService.GetPricesAsync(id));
+            PricesPageViewModel pricesPageViewModel = await _pricesService.GetPricesAsync(id, pageIndex, pageSize);
+
+            return new OkObjectResult(pricesPageViewModel);
         }
 
         // POST api/prices/prepare/5

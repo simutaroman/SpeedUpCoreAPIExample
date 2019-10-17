@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using SpeedUpCoreAPIExample.Exceptions;
+using SpeedUpCoreAPIExample.Helpers;
 using SpeedUpCoreAPIExample.Interfaces;
 using SpeedUpCoreAPIExample.Models;
 using SpeedUpCoreAPIExample.Settings;
@@ -21,19 +22,24 @@ namespace SpeedUpCoreAPIExample.Services
         private readonly ISelfHttpClient _selfHttpClient;
         private readonly IPricesCacheRepository _pricesCacheRepository;
         private readonly IProductCacheRepository _productCacheRepository;
+        private readonly ProductsSettings _settings;
 
         public ProductsService(IProductsRepository productsRepository, IPricesCacheRepository pricesCacheRepository,
-            IProductCacheRepository productCacheRepository, IOptions<ProductsSettings> settings, ISelfHttpClient selfHttpClient)
+             IProductCacheRepository productCacheRepository, IOptions<ProductsSettings> settings, ISelfHttpClient selfHttpClient)
         {
             _productsRepository = productsRepository;
             _selfHttpClient = selfHttpClient;
             _pricesCacheRepository = pricesCacheRepository;
             _productCacheRepository = productCacheRepository;
+            _settings = settings.Value;
         }
 
-        public async Task<IEnumerable<ProductViewModel>> FindProductsAsync(string sku)
+
+        public async Task<ProductsPageViewModel> FindProductsAsync(string sku, int pageIndex, int pageSize)
         {
-            IEnumerable<Product> products = await _productsRepository.FindProductsAsync(sku);
+            pageSize = pageSize == 0 ? _settings.DefaultPageSize : pageSize;
+            PaginatedList<Product> products = await PaginatedList<Product>
+                                            .FromIQueryable(_productsRepository.FindProductsAsync(sku), pageIndex, pageSize);
 
             if (products.Count() == 1)
             {
@@ -57,14 +63,18 @@ namespace SpeedUpCoreAPIExample.Services
                     });
                 }
             };
-            return products.Select(p => new ProductViewModel(p));
+
+            return new ProductsPageViewModel(products);
         }
 
-        public async Task<IEnumerable<ProductViewModel>> GetAllProductsAsync()
-        {
-            IEnumerable<Product> products = await _productsRepository.GetAllProductsAsync();
 
-            return products.Select(p => new ProductViewModel(p));
+        public async Task<ProductsPageViewModel> GetAllProductsAsync(int pageIndex, int pageSize)
+        {
+            pageSize = pageSize == 0 ? _settings.DefaultPageSize : pageSize;
+            PaginatedList<Product> products = await PaginatedList<Product>
+                                            .FromIQueryable(_productsRepository.GetAllProductsAsync(), pageIndex, pageSize);
+
+            return new ProductsPageViewModel(products);
         }
 
         public async Task<ProductViewModel> GetProductAsync(int productId)

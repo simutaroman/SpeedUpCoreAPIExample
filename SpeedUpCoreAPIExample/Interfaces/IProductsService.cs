@@ -7,9 +7,9 @@ namespace SpeedUpCoreAPIExample.Interfaces
 {
     public interface IProductsService
     {
-        Task<IEnumerable<ProductViewModel>> GetAllProductsAsync();
+        Task<ProductsPageViewModel> GetAllProductsAsync(int pageIndex, int pageSize);
+        Task<ProductsPageViewModel> FindProductsAsync(string sku, int pageIndex, int pageSize);
         Task<ProductViewModel> GetProductAsync(int productId);
-        Task<IEnumerable<ProductViewModel>> FindProductsAsync(string sku);
         Task<ProductViewModel> DeleteProductAsync(int productId);
     }
 }

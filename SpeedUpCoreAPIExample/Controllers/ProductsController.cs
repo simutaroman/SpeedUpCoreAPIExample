@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SpeedUpCoreAPIExample.Interfaces;
+using SpeedUpCoreAPIExample.ViewModels;
 using System.Threading.Tasks;
 
 namespace SpeedUpCoreAPIExample.Controllers
@@ -17,9 +18,12 @@ namespace SpeedUpCoreAPIExample.Controllers
 
         // GET /api/products
         [HttpGet]
-        public async Task<IActionResult> GetAllProductsAsync()
+        [HttpGet]
+        public async Task<IActionResult> GetAllProductsAsync(int pageIndex, int pageSize)
         {
-            return new OkObjectResult(await _productsService.GetAllProductsAsync());
+            ProductsPageViewModel productsPageViewModel = await _productsService.GetAllProductsAsync(pageIndex, pageSize);
+
+            return new OkObjectResult(productsPageViewModel);
         }
 
         // GET /api/products/5
@@ -31,9 +35,11 @@ namespace SpeedUpCoreAPIExample.Controllers
 
         // GET /api/products/find
         [HttpGet("find/{sku}")]
-        public async Task<IActionResult> FindProductsAsync(string sku)
+        public async Task<IActionResult> FindProductsAsync(string sku, int pageIndex, int pageSize)
         {
-            return new OkObjectResult(await _productsService.FindProductsAsync(sku));
+            ProductsPageViewModel productsPageViewModel = await _productsService.FindProductsAsync(sku, pageIndex, pageSize);
+
+            return new OkObjectResult(productsPageViewModel);
         }
 
         // DELETE /api/products/5
