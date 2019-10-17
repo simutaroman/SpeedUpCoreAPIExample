@@ -17,7 +17,7 @@ namespace SpeedUpCoreAPIExample.Contexts
         }
 
         // GET /api/prices/1
-        [HttpGet("{Id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetPricesAsync(int id, int pageIndex, int pageSize)
         {
             PricesPageViewModel pricesPageViewModel = await _pricesService.GetPricesAsync(id, pageIndex, pageSize);
