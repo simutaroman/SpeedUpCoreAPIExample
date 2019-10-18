@@ -5,7 +5,6 @@ using SpeedUpCoreAPIExample.Models;
 using SpeedUpCoreAPIExample.Settings;
 using SpeedUpCoreAPIExample.ViewModels;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SpeedUpCoreAPIExample.Services
@@ -16,7 +15,8 @@ namespace SpeedUpCoreAPIExample.Services
         private readonly IPricesCacheRepository _pricesCacheRepository;
         private readonly PricesSettings _settings;
 
-        public PricesService(IPricesRepository pricesRepository, IPricesCacheRepository pricesCacheRepository, IOptions<PricesSettings> settings)
+        public PricesService(IPricesRepository pricesRepository, IPricesCacheRepository pricesCacheRepository,
+                             IOptions<PricesSettings> settings)
         {
             _pricesRepository = pricesRepository;
             _pricesCacheRepository = pricesCacheRepository;
@@ -25,8 +25,8 @@ namespace SpeedUpCoreAPIExample.Services
 
         public async Task<PricesPageViewModel> GetPricesAsync(int productId, int pageIndex, int pageSize)
         {
-            IEnumerable<Price> prices = await _pricesCacheRepository.GetOrSetValueAsync(productId.ToString(), async () =>
-                    await _pricesRepository.GetPricesAsync(productId));
+            IEnumerable<Price> prices = await _pricesCacheRepository.GetOrSetValueAsync(productId.ToString(),
+                                async () => await _pricesRepository.GetPricesAsync(productId));
 
             pageSize = pageSize == 0 ? _settings.DefaultPageSize : pageSize;
             return new PricesPageViewModel(new PaginatedList<Price>(prices, pageIndex, pageSize));
@@ -44,7 +44,14 @@ namespace SpeedUpCoreAPIExample.Services
 
         public async Task PreparePricesAsync(int productId)
         {
-                await _pricesCacheRepository.GetOrSetValueAsync(productId.ToString(), async () => await _pricesRepository.GetPricesAsync(productId));
+            try
+            {
+                await _pricesCacheRepository.GetOrSetValueAsync(productId.ToString(),
+                                async () => await _pricesRepository.GetPricesAsync(productId));
+            }
+            catch
+            {
+            }
         }
     }
 }

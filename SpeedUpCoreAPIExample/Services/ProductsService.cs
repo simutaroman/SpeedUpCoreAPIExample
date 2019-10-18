@@ -1,16 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using SpeedUpCoreAPIExample.Exceptions;
 using SpeedUpCoreAPIExample.Helpers;
 using SpeedUpCoreAPIExample.Interfaces;
 using SpeedUpCoreAPIExample.Models;
 using SpeedUpCoreAPIExample.Settings;
 using SpeedUpCoreAPIExample.ViewModels;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,7 +21,7 @@ namespace SpeedUpCoreAPIExample.Services
         private readonly ProductsSettings _settings;
 
         public ProductsService(IProductsRepository productsRepository, IPricesCacheRepository pricesCacheRepository,
-             IProductCacheRepository productCacheRepository, IOptions<ProductsSettings> settings, ISelfHttpClient selfHttpClient)
+            IProductCacheRepository productCacheRepository, IOptions<ProductsSettings> settings, ISelfHttpClient selfHttpClient)
         {
             _productsRepository = productsRepository;
             _selfHttpClient = selfHttpClient;
@@ -33,7 +29,6 @@ namespace SpeedUpCoreAPIExample.Services
             _productCacheRepository = productCacheRepository;
             _settings = settings.Value;
         }
-
 
         public async Task<ProductsPageViewModel> FindProductsAsync(string sku, int pageIndex, int pageSize)
         {
@@ -44,7 +39,7 @@ namespace SpeedUpCoreAPIExample.Services
             if (products.Count() == 1)
             {
                 //only one record found
-                Product product = products.FirstOrDefault();
+                Product product = products.Single();
                 string productId = product.ProductId.ToString();
 
                 //cache a product if not in cache yet
@@ -67,7 +62,6 @@ namespace SpeedUpCoreAPIExample.Services
             return new ProductsPageViewModel(products);
         }
 
-
         public async Task<ProductsPageViewModel> GetAllProductsAsync(int pageIndex, int pageSize)
         {
             pageSize = pageSize == 0 ? _settings.DefaultPageSize : pageSize;
@@ -79,10 +73,15 @@ namespace SpeedUpCoreAPIExample.Services
 
         public async Task<ProductViewModel> GetProductAsync(int productId)
         {
-            Product product = await _productCacheRepository.GetOrSetValueAsync(productId.ToString(), async () => await _productsRepository.GetProductAsync(productId));
+            Product product = await _productCacheRepository.GetOrSetValueAsync(productId.ToString(), async () =>
+            {
+                return await _productsRepository.GetProductAsync(productId);
+            });
 
             if (product == null)
+            {
                 throw new HttpException(HttpStatusCode.NotFound, "Product not found", $"Product Id: {productId}");
+            }
 
             //prepare prices
             if (!await _pricesCacheRepository.IsValueCachedAsync(productId.ToString()))
@@ -102,7 +101,9 @@ namespace SpeedUpCoreAPIExample.Services
             Product product = await _productsRepository.DeleteProductAsync(productId);
 
             if (product == null)
+            {
                 throw new HttpException(HttpStatusCode.NotFound, "Product not found", $"Product Id: {productId}");
+            }
 
             //remove product and its prices from cache
             await _productCacheRepository.RemoveValueAsync(productId.ToString());
@@ -111,6 +112,10 @@ namespace SpeedUpCoreAPIExample.Services
             return new ProductViewModel(product);
         }
 
+        /// <summary>
+        /// Prepare prices by product's identifier by calling prices/prepare API
+        /// </summary>
+        /// <param name="productId">The identifier.</param>
         private async void CallPreparePricesApiAsync(string productId)
         {
             await _selfHttpClient.PostIdAsync("prices/prepare", productId);

@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SpeedUpCoreAPIExample.Filters;
 using SpeedUpCoreAPIExample.Interfaces;
 using SpeedUpCoreAPIExample.ViewModels;
 using System.Threading.Tasks;
 
-namespace SpeedUpCoreAPIExample.Contexts
+namespace SpeedUpCoreAPIExample.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,6 +19,7 @@ namespace SpeedUpCoreAPIExample.Contexts
 
         // GET /api/prices/1
         [HttpGet("{id}")]
+        [ValidatePaging]
         public async Task<IActionResult> GetPricesAsync(int id, int pageIndex, int pageSize)
         {
             PricesPageViewModel pricesPageViewModel = await _pricesService.GetPricesAsync(id, pageIndex, pageSize);

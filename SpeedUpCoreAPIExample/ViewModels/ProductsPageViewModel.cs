@@ -9,6 +9,8 @@ namespace SpeedUpCoreAPIExample.ViewModels
     {
         public IList<ProductViewModel> Items;
 
+        public ProductsPageViewModel() { }
+
         public ProductsPageViewModel(PaginatedList<Product> paginatedList) :
                 base(paginatedList.PageIndex, paginatedList.PageSize, paginatedList.TotalPages, paginatedList.TotalCount)
         {

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SpeedUpCoreAPIExample.Contexts;
 using SpeedUpCoreAPIExample.Exceptions;
+using SpeedUpCoreAPIExample.Filters;
 using SpeedUpCoreAPIExample.Helpers;
 using SpeedUpCoreAPIExample.Interfaces;
 using SpeedUpCoreAPIExample.Repositories;
@@ -53,9 +54,17 @@ namespace SpeedUpCoreAPIExample
             services.AddScoped<IPricesRepository, PricesRepository>();
             services.AddScoped<IPricesCacheRepository, PricesCacheRepository>();
             services.AddScoped<IProductCacheRepository, ProductCacheRepository>();
+            
+            services.AddSingleton<ValidateIdAsyncActionFilter>();
+            services.AddSingleton<ValidatePagingAsyncActionFilter>();
 
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<IPricesService, PricesService>();
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

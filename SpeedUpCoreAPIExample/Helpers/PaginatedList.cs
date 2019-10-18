@@ -13,18 +13,18 @@ namespace SpeedUpCoreAPIExample.Helpers
         public int TotalCount { get; private set; }
         public int TotalPages { get; private set; }
 
-        public PaginatedList(IEnumerable<T> source, int pageSize, int pageIndex = 1)
+        public PaginatedList(IEnumerable<T> source, int pageIndex, int pageSize)
         {
             TotalCount = source.Count();
 
-            PageIndex = pageIndex;
+            PageIndex = pageIndex == 0 ? 1 : pageIndex;
             PageSize = pageSize == 0 ? TotalCount : pageSize;
             TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
 
             this.AddRange(source.Skip((PageIndex - 1) * PageSize).Take(PageSize));
         }
 
-        private PaginatedList(IEnumerable<T> source, int pageSize, int pageIndex, int totalCount) : base(source)
+        private PaginatedList(IEnumerable<T> source, int pageIndex, int pageSize, int totalCount) : base(source)
         {
             PageIndex = pageIndex;
             PageSize = pageSize;
@@ -32,9 +32,11 @@ namespace SpeedUpCoreAPIExample.Helpers
             TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
         }
 
-        public static async Task<PaginatedList<T>> FromIQueryable(IQueryable<T> source, int pageSize, int pageIndex = 1)
+        public static async Task<PaginatedList<T>> FromIQueryable(IQueryable<T> source, int pageIndex, int pageSize)
         {
             int totalCount = await source.CountAsync();
+
+            pageIndex = pageIndex == 0 ? 1 : pageIndex;
             pageSize = pageSize == 0 ? totalCount : pageSize;
 
             int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
@@ -42,12 +44,12 @@ namespace SpeedUpCoreAPIExample.Helpers
             if (pageIndex > totalPages)
             {
                 //return empty list
-                return new PaginatedList<T>(new List<T>(), pageSize, pageIndex, totalCount);
+                return new PaginatedList<T>(new List<T>(), pageIndex, pageSize, totalCount);
             }
 
             if (pageIndex == 1 && pageSize == totalCount)
             {
-                //no paging needed
+                //no paging required
             }
             else
             {
@@ -55,7 +57,7 @@ namespace SpeedUpCoreAPIExample.Helpers
             };
 
             List<T> sourceList = await source.ToListAsync();
-            return new PaginatedList<T>(sourceList, pageSize, pageIndex, totalCount);
+            return new PaginatedList<T>(sourceList, pageIndex, pageSize, totalCount);
         }
     }
 }
