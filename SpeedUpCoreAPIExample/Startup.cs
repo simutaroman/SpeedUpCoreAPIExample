@@ -34,6 +34,16 @@ namespace SpeedUpCoreAPIExample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Default", builder =>
+                {
+                    builder.AllowAnyOrigin();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
+                });
+            });
+
             services.AddControllers();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             
@@ -82,6 +92,8 @@ namespace SpeedUpCoreAPIExample
             app.UseAuthorization();
 
             app.UseMiddleware<ExceptionsHandlingMiddleware>();
+            
+            app.UseCors("Default");
 
             app.UseEndpoints(endpoints =>
             {

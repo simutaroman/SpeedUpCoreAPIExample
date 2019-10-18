@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -11,13 +12,21 @@ namespace SpeedUpCoreAPIExample.Exceptions
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionsHandlingMiddleware> _logger;
+        private readonly ICorsService _corsService;
+        private readonly CorsOptions _corsOptions;
 
-        public ExceptionsHandlingMiddleware(RequestDelegate next, ILogger<ExceptionsHandlingMiddleware> logger)
+        public ExceptionsHandlingMiddleware(RequestDelegate next, ILogger<ExceptionsHandlingMiddleware> logger,
+                                            ICorsService corsService, IOptions<CorsOptions> corsOptions)
         {
             _next = next;
             _logger = logger;
+            _corsService = corsService;
+            _corsOptions = corsOptions.Value;
         }
 
+        /// <summary>
+        /// Execute Middleware
+        /// </summary>
         public async Task InvokeAsync(HttpContext httpContext)
         {
             try
@@ -34,9 +43,14 @@ namespace SpeedUpCoreAPIExample.Exceptions
             }
         }
 
+        /// <summary>
+        /// Handle HTTP exceptions
+        /// </summary>
+        /// <param name="context">Current HttpContext.</param>
+        /// <param name="exception">Custom HTTP exception.</param>
         private async Task HandleHttpExceptionAsync(HttpContext context, HttpException exception)
         {
-            _logger.LogError(exception, exception.MessageDetail);
+            _logger.LogError(exception, exception.MessageDetail ?? exception.Message);
 
             if (!context.Response.HasStarted)
             {
@@ -44,6 +58,9 @@ namespace SpeedUpCoreAPIExample.Exceptions
                 string message = exception.Message;
 
                 context.Response.Clear();
+
+                //repopulate Response header with CORS policy
+                _corsService.ApplyResult(_corsService.EvaluatePolicy(context, _corsOptions.GetPolicy("Default")), context.Response);
 
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = statusCode;
@@ -53,9 +70,9 @@ namespace SpeedUpCoreAPIExample.Exceptions
             }
         }
 
-        private async Task HandleUnhandledExceptionAsync(HttpContext context,
-                                Exception exception)
+        private async Task HandleUnhandledExceptionAsync(HttpContext context, Exception exception)
         {
+
             _logger.LogError(exception, exception.Message);
 
             if (!context.Response.HasStarted)
@@ -68,6 +85,10 @@ namespace SpeedUpCoreAPIExample.Exceptions
                 message = "An unhandled exception has occurred";
 #endif
                 context.Response.Clear();
+
+                //repopulate Response header with CORS policy
+                _corsService.ApplyResult(_corsService.EvaluatePolicy(context, _corsOptions.GetPolicy("Default")), context.Response);
+
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = statusCode;
 
