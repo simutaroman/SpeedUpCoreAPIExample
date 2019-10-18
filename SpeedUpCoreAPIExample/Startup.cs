@@ -45,6 +45,11 @@ namespace SpeedUpCoreAPIExample
             });
 
             services.AddControllers();
+            services.AddApiVersioning(options =>
+            {
+                options.ErrorResponses = new VersioningErrorResponseProvider();
+            });
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             
             services.AddHttpClient<ISelfHttpClient, SelfHttpClient>();
@@ -57,6 +62,7 @@ namespace SpeedUpCoreAPIExample
 
             services.Configure<ProductsSettings>(Configuration.GetSection("Products"));
             services.Configure<PricesSettings>(Configuration.GetSection("Prices"));
+            services.Configure<ApiSettings>(Configuration.GetSection("Api"));
 
             services.AddDbContext<DefaultContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultDatabase")));
 

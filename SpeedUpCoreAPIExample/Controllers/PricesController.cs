@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace SpeedUpCoreAPIExample.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("/api/v{version:apiVersion}/[controller]/")]
     [ApiController]
+    [ValidateId]
     public class PricesController : ControllerBase
     {
         private readonly IPricesService _pricesService;

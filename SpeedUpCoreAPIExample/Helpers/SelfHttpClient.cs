@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using SpeedUpCoreAPIExample.Interfaces;
-using SpeedUpCoreAPIExample.Models;
+using SpeedUpCoreAPIExample.Settings;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -15,26 +13,29 @@ namespace SpeedUpCoreAPIExample.Helpers
     {
         private readonly HttpClient _client;
 
-        public SelfHttpClient(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
+        public SelfHttpClient(HttpClient httpClient, IHttpContextAccessor httpContextAccessor, IOptions<ApiSettings> settings)
         {
-            string baseAddress = string.Format("{0}://{1}/api/",
-                                httpContextAccessor.HttpContext.Request.Scheme,
-                                httpContextAccessor.HttpContext.Request.Host);
+            string baseAddress = string.Format("{0}://{1}/api/v{2}/",
+                                                httpContextAccessor.HttpContext.Request.Scheme,
+                                                httpContextAccessor.HttpContext.Request.Host,
+                                                settings.Value.Version);
 
             _client = httpClient;
             _client.BaseAddress = new Uri(baseAddress);
         }
 
-        // Call any controller's action with HttpPost method and Id parameter.
-        // apiRoute - Relative API route.
-        // id - The parameter.
+        /// <summary>
+        /// Call any controller's action with HttpPost method and Id parameter.
+        /// </summary>
+        /// <param name="apiRoute">Relative API route.</param>
+        /// <param name="id">The parameter.</param>
         public async Task PostIdAsync(string apiRoute, string id)
         {
             try
             {
                 var result = await _client.PostAsync(string.Format("{0}/{1}", apiRoute, id), null).ConfigureAwait(false);
             }
-            catch (Exception ex)
+            catch
             {
                 //ignore errors
             }
